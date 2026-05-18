@@ -331,7 +331,7 @@ st.markdown(
     .footer {
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        left: 20px;
         width: auto;
         background-color: #111;
         color: white;
