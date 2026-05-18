@@ -126,16 +126,22 @@ st.markdown(
     }
 
     [data-testid="stTextArea"] textarea {
-        background-color: rgba(255,255,255,0.06) !important;
-        color: white !important;
+        background-color: #0f172a !important;
+        color: #ffffff !important;
         border-radius: 15px !important;
         border: 1px solid rgba(56,189,248,0.4) !important;
         box-shadow: 0px 0px 15px rgba(56,189,248,0.15);
+        font-size: 16px !important;
+    }
+
+    [data-testid="stTextArea"] textarea::placeholder {
+        color: #94a3b8 !important;
     }
 
     [data-testid="stTextArea"] textarea:focus {
         border: 1px solid #38bdf8 !important;
         box-shadow: 0px 0px 20px rgba(56,189,248,0.4) !important;
+        color: white !important;
     }
 
     .feature-card {
