@@ -31,7 +31,7 @@ st.set_page_config(
 )
 
 # =========================
-# FUTURISTIC UI DESIGN
+# FUTURISTIC UI
 # =========================
 
 st.markdown(
@@ -48,13 +48,8 @@ st.markdown(
         color: white;
     }
 
-    h1, h2, h3 {
-        color: white;
-        font-weight: bold;
-    }
-
     .main-title {
-        font-size: 60px;
+        font-size: 65px;
         font-weight: 800;
         background: linear-gradient(
             90deg,
@@ -63,56 +58,60 @@ st.markdown(
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-top: 30px;
+        margin-top: 20px;
     }
 
     .subtitle {
         font-size: 22px;
         color: #cbd5e1;
+        margin-top: 20px;
         margin-bottom: 30px;
     }
 
     .feature-card {
-        background-color: rgba(255,255,255,0.05);
+        background: rgba(255,255,255,0.05);
         padding: 20px;
         border-radius: 18px;
-        box-shadow: 0px 0px 20px rgba(59,130,246,0.2);
         text-align: center;
-        height: 180px;
+        box-shadow: 0px 0px 20px rgba(59,130,246,0.25);
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     .feature-title {
-        font-size: 22px;
+        font-size: 24px;
         font-weight: bold;
         color: #38bdf8;
+        margin-bottom: 10px;
     }
 
     .feature-text {
+        font-size: 16px;
         color: #cbd5e1;
-        margin-top: 10px;
     }
 
-    .stButton>button {
+    .stButton > button {
         background: linear-gradient(
             90deg,
             #2563eb,
             #9333ea
         );
         color: white;
+        border: none;
         border-radius: 12px;
         height: 3.2em;
-        width: 100%;
         font-size: 18px;
         font-weight: bold;
-        border: none;
+        width: 100%;
     }
 
-    .stButton>button:hover {
+    .stButton > button:hover {
         background: linear-gradient(
             90deg,
             #1d4ed8,
             #7e22ce
         );
+        color: white;
     }
 
     section[data-testid="stSidebar"] {
@@ -123,7 +122,6 @@ st.markdown(
         position: fixed;
         bottom: 20px;
         left: 20px;
-        width: auto;
         background-color: rgba(255,255,255,0.08);
         color: white;
         padding: 10px 18px;
@@ -160,9 +158,9 @@ with col1:
     st.markdown(
         """
         <div class="subtitle">
-            Upload your resume and get personalized AI-powered
-            career guidance, ATS analysis, roadmap generation,
-            and interview preparation.
+            Upload your resume and get AI-powered ATS analysis,
+            missing skills detection, personalized roadmap,
+            and interview preparation guidance.
         </div>
         """,
         unsafe_allow_html=True
@@ -182,11 +180,9 @@ with col2:
 c1, c2, c3, c4 = st.columns(4)
 
 with c1:
-
     st.markdown(
         """
         <div class="feature-card">
-
             <div class="feature-title">
                 ATS Score
             </div>
@@ -194,18 +190,15 @@ with c1:
             <div class="feature-text">
                 Analyze resume compatibility instantly.
             </div>
-
         </div>
         """,
         unsafe_allow_html=True
     )
 
 with c2:
-
     st.markdown(
         """
         <div class="feature-card">
-
             <div class="feature-title">
                 Missing Skills
             </div>
@@ -213,45 +206,38 @@ with c2:
             <div class="feature-text">
                 Discover important skills missing in your resume.
             </div>
-
         </div>
         """,
         unsafe_allow_html=True
     )
 
 with c3:
-
     st.markdown(
         """
         <div class="feature-card">
-
             <div class="feature-title">
                 Roadmap
             </div>
 
             <div class="feature-text">
-                Get strategic personalized learning paths.
+                Get personalized learning roadmap.
             </div>
-
         </div>
         """,
         unsafe_allow_html=True
     )
 
 with c4:
-
     st.markdown(
         """
         <div class="feature-card">
-
             <div class="feature-title">
                 AI Projects
             </div>
 
             <div class="feature-text">
-                Generate JD-based project recommendations.
+                Generate JD-based AI project ideas.
             </div>
-
         </div>
         """,
         unsafe_allow_html=True
@@ -283,7 +269,7 @@ if st.button("Analyze Resume"):
         resume_text = extract_text_from_pdf(uploaded_file)
 
         prompt = f"""
-        Analyze this resume against the job description.
+        Analyze the resume against the job description.
 
         Return ONLY valid JSON.
 
@@ -330,6 +316,8 @@ if st.button("Analyze Resume"):
 
             st.progress(ats_score / 100)
 
+            st.success(f"ATS Score: {ats_score}%")
+
             # =========================
             # SKILLS
             # =========================
@@ -372,7 +360,7 @@ if st.button("Analyze Resume"):
         )
 
 # =========================
-# FLOATING FOOTER
+# FOOTER
 # =========================
 
 st.markdown(
