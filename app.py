@@ -95,10 +95,68 @@ st.markdown(
         font-size: 18px;
         font-weight: bold;
         width: 100%;
+        box-shadow: 0px 0px 20px rgba(59,130,246,0.3);
+    }
+
+    .stButton > button:hover {
+        background: linear-gradient(
+            90deg,
+            #1d4ed8,
+            #7e22ce
+        );
     }
 
     section[data-testid="stSidebar"] {
         background-color: #020617;
+    }
+
+    .stFileUploader label,
+    .stTextArea label {
+        color: #38bdf8 !important;
+        font-size: 20px !important;
+        font-weight: bold !important;
+    }
+
+    [data-testid="stFileUploader"] {
+        background: rgba(255,255,255,0.06);
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid rgba(56,189,248,0.4);
+        box-shadow: 0px 0px 20px rgba(56,189,248,0.15);
+    }
+
+    [data-testid="stTextArea"] textarea {
+        background-color: rgba(255,255,255,0.06) !important;
+        color: white !important;
+        border-radius: 15px !important;
+        border: 1px solid rgba(56,189,248,0.4) !important;
+        box-shadow: 0px 0px 15px rgba(56,189,248,0.15);
+    }
+
+    [data-testid="stTextArea"] textarea:focus {
+        border: 1px solid #38bdf8 !important;
+        box-shadow: 0px 0px 20px rgba(56,189,248,0.4) !important;
+    }
+
+    .feature-card {
+        background: rgba(255,255,255,0.05);
+        padding: 20px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0px 0px 20px rgba(59,130,246,0.25);
+        margin-top: 20px;
+    }
+
+    .feature-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #38bdf8;
+        margin-bottom: 10px;
+    }
+
+    .feature-text {
+        color: #cbd5e1;
+        font-size: 15px;
     }
 
     </style>
@@ -129,7 +187,7 @@ with col1:
         <div class="subtitle">
             Upload your resume and get AI-powered ATS analysis,
             missing skills detection, roadmap generation,
-            and interview preparation guidance.
+            project suggestions, and interview preparation.
         </div>
         """,
         unsafe_allow_html=True
@@ -147,33 +205,6 @@ with col2:
 # =========================
 
 c1, c2, c3, c4 = st.columns(4)
-
-card_style = """
-<style>
-.feature-card {
-    background: rgba(255,255,255,0.05);
-    padding: 20px;
-    border-radius: 18px;
-    text-align: center;
-    box-shadow: 0px 0px 20px rgba(59,130,246,0.25);
-    margin-top: 20px;
-}
-
-.feature-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #38bdf8;
-    margin-bottom: 10px;
-}
-
-.feature-text {
-    color: #cbd5e1;
-    font-size: 15px;
-}
-</style>
-"""
-
-st.markdown(card_style, unsafe_allow_html=True)
 
 with c1:
     st.markdown(
@@ -261,6 +292,7 @@ if st.button("Analyze Resume"):
           "ats_score": 0,
           "matching_skills": [],
           "missing_skills": [],
+          "suggested_projects": [],
           "interview_questions": []
         }}
 
@@ -317,6 +349,23 @@ if st.button("Analyze Resume"):
 
                 for skill in data["missing_skills"]:
                     st.error(skill)
+
+            # SUGGESTED PROJECTS
+
+            st.subheader("Suggested Projects")
+
+            for project in data["suggested_projects"]:
+
+                st.markdown(
+                    f"""
+                    <div class="feature-card">
+                        <div class="feature-title">
+                            {project}
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
             # INTERVIEW QUESTIONS
 
