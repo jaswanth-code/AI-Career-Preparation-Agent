@@ -182,9 +182,11 @@ with col2:
 c1, c2, c3, c4 = st.columns(4)
 
 with c1:
+
     st.markdown(
         """
         <div class="feature-card">
+
             <div class="feature-title">
                 ATS Score
             </div>
@@ -192,15 +194,18 @@ with c1:
             <div class="feature-text">
                 Analyze resume compatibility instantly.
             </div>
+
         </div>
         """,
         unsafe_allow_html=True
     )
 
 with c2:
+
     st.markdown(
         """
         <div class="feature-card">
+
             <div class="feature-title">
                 Missing Skills
             </div>
@@ -208,15 +213,18 @@ with c2:
             <div class="feature-text">
                 Discover important skills missing in your resume.
             </div>
+
         </div>
         """,
         unsafe_allow_html=True
     )
 
 with c3:
+
     st.markdown(
         """
         <div class="feature-card">
+
             <div class="feature-title">
                 Roadmap
             </div>
@@ -224,15 +232,18 @@ with c3:
             <div class="feature-text">
                 Get strategic personalized learning paths.
             </div>
+
         </div>
         """,
         unsafe_allow_html=True
     )
 
 with c4:
+
     st.markdown(
         """
         <div class="feature-card">
+
             <div class="feature-title">
                 AI Projects
             </div>
@@ -240,6 +251,7 @@ with c4:
             <div class="feature-text">
                 Generate JD-based project recommendations.
             </div>
+
         </div>
         """,
         unsafe_allow_html=True
@@ -271,9 +283,7 @@ if st.button("Analyze Resume"):
         resume_text = extract_text_from_pdf(uploaded_file)
 
         prompt = f"""
-        You are an expert AI Career Preparation Agent.
-
-        Analyze the resume against the job description.
+        Analyze this resume against the job description.
 
         Return ONLY valid JSON.
 
@@ -281,39 +291,7 @@ if st.button("Analyze Resume"):
           "ats_score": 0,
           "matching_skills": [],
           "missing_skills": [],
-          "resume_improvements": [],
-          "important_topics": [],
-          "projects": [
-            {{
-              "title": "",
-              "difficulty": "",
-              "description": "",
-              "skills_gained": []
-            }}
-          ],
-          "interview_questions": [],
-          "roadmap": {{
-              "phase1": {{
-                  "title": "",
-                  "focus": [],
-                  "project": ""
-              }},
-              "phase2": {{
-                  "title": "",
-                  "focus": [],
-                  "project": ""
-              }},
-              "phase3": {{
-                  "title": "",
-                  "focus": [],
-                  "project": ""
-              }},
-              "phase4": {{
-                  "title": "",
-                  "focus": [],
-                  "project": ""
-              }}
-          }}
+          "interview_questions": []
         }}
 
         Resume:
@@ -334,7 +312,9 @@ if st.button("Analyze Resume"):
                     }
                 ]
             )
+
             result = response.choices[0].message.content
+
             result = re.sub(r"```json", "", result)
             result = re.sub(r"```", "", result)
 
@@ -369,63 +349,6 @@ if st.button("Analyze Resume"):
 
                 for skill in data["missing_skills"]:
                     st.error(skill)
-
-            # =========================
-            # ROADMAP
-            # =========================
-
-            st.subheader("Strategic Career Roadmap")
-
-            roadmap = data["roadmap"]
-
-            phase_cols = st.columns(4)
-
-            phases = [
-                "phase1",
-                "phase2",
-                "phase3",
-                "phase4"
-            ]
-
-            for i, phase in enumerate(phases):
-
-                with phase_cols[i]:
-
-                    st.markdown(
-                        f"### {roadmap[phase]['title']}"
-                    )
-
-                    for item in roadmap[phase]["focus"]:
-                        st.write(f"• {item}")
-
-                    st.success(
-                        roadmap[phase]["project"]
-                    )
-
-            # =========================
-            # PROJECTS
-            # =========================
-
-            st.subheader("Suggested Projects")
-
-            for project in data["projects"]:
-
-                st.markdown(
-                    f"### {project['title']}"
-                )
-
-                st.write(
-                    f"Difficulty: {project['difficulty']}"
-                )
-
-                st.write(project["description"])
-
-                st.write("Skills Gained:")
-
-                for skill in project["skills_gained"]:
-                    st.write(f"• {skill}")
-
-                st.divider()
 
             # =========================
             # INTERVIEW QUESTIONS
