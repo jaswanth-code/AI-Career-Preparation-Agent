@@ -31,7 +31,7 @@ st.set_page_config(
 )
 
 # =========================
-# FUTURISTIC UI
+# CUSTOM UI
 # =========================
 
 st.markdown(
@@ -68,26 +68,18 @@ st.markdown(
         margin-bottom: 30px;
     }
 
-    .feature-card {
-        background: rgba(255,255,255,0.05);
-        padding: 20px;
-        border-radius: 18px;
-        text-align: center;
-        box-shadow: 0px 0px 20px rgba(59,130,246,0.25);
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .feature-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #38bdf8;
-        margin-bottom: 10px;
-    }
-
-    .feature-text {
-        font-size: 16px;
-        color: #cbd5e1;
+    .footer {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background-color: rgba(255,255,255,0.08);
+        color: white;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0px 0px 20px rgba(59,130,246,0.3);
+        z-index: 100;
     }
 
     .stButton > button {
@@ -105,31 +97,8 @@ st.markdown(
         width: 100%;
     }
 
-    .stButton > button:hover {
-        background: linear-gradient(
-            90deg,
-            #1d4ed8,
-            #7e22ce
-        );
-        color: white;
-    }
-
     section[data-testid="stSidebar"] {
         background-color: #020617;
-    }
-
-    .footer {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        background-color: rgba(255,255,255,0.08);
-        color: white;
-        padding: 10px 18px;
-        border-radius: 12px;
-        font-size: 14px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0px 0px 20px rgba(59,130,246,0.3);
-        z-index: 100;
     }
 
     </style>
@@ -159,7 +128,7 @@ with col1:
         """
         <div class="subtitle">
             Upload your resume and get AI-powered ATS analysis,
-            missing skills detection, personalized roadmap,
+            missing skills detection, roadmap generation,
             and interview preparation guidance.
         </div>
         """,
@@ -179,14 +148,38 @@ with col2:
 
 c1, c2, c3, c4 = st.columns(4)
 
+card_style = """
+<style>
+.feature-card {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0px 0px 20px rgba(59,130,246,0.25);
+    margin-top: 20px;
+}
+
+.feature-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #38bdf8;
+    margin-bottom: 10px;
+}
+
+.feature-text {
+    color: #cbd5e1;
+    font-size: 15px;
+}
+</style>
+"""
+
+st.markdown(card_style, unsafe_allow_html=True)
+
 with c1:
     st.markdown(
         """
         <div class="feature-card">
-            <div class="feature-title">
-                ATS Score
-            </div>
-
+            <div class="feature-title">ATS Score</div>
             <div class="feature-text">
                 Analyze resume compatibility instantly.
             </div>
@@ -199,10 +192,7 @@ with c2:
     st.markdown(
         """
         <div class="feature-card">
-            <div class="feature-title">
-                Missing Skills
-            </div>
-
+            <div class="feature-title">Missing Skills</div>
             <div class="feature-text">
                 Discover important skills missing in your resume.
             </div>
@@ -215,10 +205,7 @@ with c3:
     st.markdown(
         """
         <div class="feature-card">
-            <div class="feature-title">
-                Roadmap
-            </div>
-
+            <div class="feature-title">Roadmap</div>
             <div class="feature-text">
                 Get personalized learning roadmap.
             </div>
@@ -231,10 +218,7 @@ with c4:
     st.markdown(
         """
         <div class="feature-card">
-            <div class="feature-title">
-                AI Projects
-            </div>
-
+            <div class="feature-title">AI Projects</div>
             <div class="feature-text">
                 Generate JD-based AI project ideas.
             </div>
@@ -306,9 +290,7 @@ if st.button("Analyze Resume"):
 
             data = json.loads(result)
 
-            # =========================
             # ATS SCORE
-            # =========================
 
             st.subheader("ATS Match Score")
 
@@ -318,9 +300,7 @@ if st.button("Analyze Resume"):
 
             st.success(f"ATS Score: {ats_score}%")
 
-            # =========================
             # SKILLS
-            # =========================
 
             col1, col2 = st.columns(2)
 
@@ -338,9 +318,7 @@ if st.button("Analyze Resume"):
                 for skill in data["missing_skills"]:
                     st.error(skill)
 
-            # =========================
             # INTERVIEW QUESTIONS
-            # =========================
 
             st.subheader("Interview Questions")
 
