@@ -7,115 +7,282 @@ import re
 from dotenv import load_dotenv
 from utils.pdf_reader import extract_text_from_pdf
 
-# Load environment variables
+# =========================
+# LOAD ENV VARIABLES
+# =========================
+
 load_dotenv()
 
-# Groq Client
+# =========================
+# GROQ CLIENT
+# =========================
+
 client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
 
-# Streamlit Page Config
+# =========================
+# PAGE CONFIG
+# =========================
+
 st.set_page_config(
     page_title="AI Career Preparation Agent",
     layout="wide"
 )
 
-# Title
-st.title("AI Career Preparation Agent")
+# =========================
+# FUTURISTIC UI DESIGN
+# =========================
 
-st.write("Upload your Resume and Paste Job Description")
-
-# Sidebar
-st.sidebar.title("AI Career Coach")
-
-st.sidebar.info(
+st.markdown(
     """
-    Features:
-    - ATS Match Score
-    - Missing Skills
-    - Personalized Roadmap
-    - JD-Based Project Suggestions
-    - Interview Questions
-    """
+    <style>
+
+    .stApp {
+        background: linear-gradient(
+            to right,
+            #020617,
+            #0f172a,
+            #111827
+        );
+        color: white;
+    }
+
+    h1, h2, h3 {
+        color: white;
+        font-weight: bold;
+    }
+
+    .main-title {
+        font-size: 60px;
+        font-weight: 800;
+        background: linear-gradient(
+            90deg,
+            #38bdf8,
+            #8b5cf6
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-top: 30px;
+    }
+
+    .subtitle {
+        font-size: 22px;
+        color: #cbd5e1;
+        margin-bottom: 30px;
+    }
+
+    .feature-card {
+        background-color: rgba(255,255,255,0.05);
+        padding: 20px;
+        border-radius: 18px;
+        box-shadow: 0px 0px 20px rgba(59,130,246,0.2);
+        text-align: center;
+        height: 180px;
+    }
+
+    .feature-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #38bdf8;
+    }
+
+    .feature-text {
+        color: #cbd5e1;
+        margin-top: 10px;
+    }
+
+    .stButton>button {
+        background: linear-gradient(
+            90deg,
+            #2563eb,
+            #9333ea
+        );
+        color: white;
+        border-radius: 12px;
+        height: 3.2em;
+        width: 100%;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .stButton>button:hover {
+        background: linear-gradient(
+            90deg,
+            #1d4ed8,
+            #7e22ce
+        );
+    }
+
+    section[data-testid="stSidebar"] {
+        background-color: #020617;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: auto;
+        background-color: rgba(255,255,255,0.08);
+        color: white;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0px 0px 20px rgba(59,130,246,0.3);
+        z-index: 100;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
-# Upload Resume
+# =========================
+# HERO SECTION
+# =========================
+
+col1, col2 = st.columns([2, 1])
+
+with col1:
+
+    st.markdown(
+        """
+        <div class="main-title">
+            AI Career<br>
+            Preparation Agent
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        """
+        <div class="subtitle">
+            Upload your resume and get personalized AI-powered
+            career guidance, ATS analysis, roadmap generation,
+            and interview preparation.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+
+    st.image(
+        "ai_banner.png",
+        use_container_width=True
+    )
+
+# =========================
+# FEATURE CARDS
+# =========================
+
+c1, c2, c3, c4 = st.columns(4)
+
+with c1:
+    st.markdown(
+        """
+        <div class="feature-card">
+            <div class="feature-title">
+                ATS Score
+            </div>
+
+            <div class="feature-text">
+                Analyze resume compatibility instantly.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with c2:
+    st.markdown(
+        """
+        <div class="feature-card">
+            <div class="feature-title">
+                Missing Skills
+            </div>
+
+            <div class="feature-text">
+                Discover important skills missing in your resume.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with c3:
+    st.markdown(
+        """
+        <div class="feature-card">
+            <div class="feature-title">
+                Roadmap
+            </div>
+
+            <div class="feature-text">
+                Get strategic personalized learning paths.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with c4:
+    st.markdown(
+        """
+        <div class="feature-card">
+            <div class="feature-title">
+                AI Projects
+            </div>
+
+            <div class="feature-text">
+                Generate JD-based project recommendations.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# =========================
+# INPUT SECTION
+# =========================
+
+st.divider()
+
 uploaded_file = st.file_uploader(
     "Upload Resume PDF",
     type=["pdf"]
 )
 
-# Job Description
 job_description = st.text_area(
     "Paste Job Description"
 )
 
-# Analyze Button
+# =========================
+# ANALYZE BUTTON
+# =========================
+
 if st.button("Analyze Resume"):
 
     if uploaded_file and job_description:
 
-        # Extract Resume Text
         resume_text = extract_text_from_pdf(uploaded_file)
 
-        # Prompt
         prompt = f"""
         You are an expert AI Career Preparation Agent.
 
-        Carefully analyze the candidate's resume against the job description.
-
-        You MUST identify:
-        - skills present in both resume and JD
-        - skills missing from the resume but required in the JD
-        - important technologies not mentioned in the resume
-        - weak areas affecting ATS score
+        Analyze the resume against the job description.
 
         Return ONLY valid JSON.
 
-        Important Instructions:
-
-        1. Suggested projects MUST be NEW.
-        2. Do NOT repeat projects already mentioned in the resume.
-        3. Generate projects based on:
-            - missing skills
-            - technologies in the job description
-            - industry expectations
-            - interview trends
-
-        4. missing_skills must contain:
-            - technologies present in JD but absent in resume
-            - frameworks missing from resume
-            - deployment/cloud tools missing
-            - APIs/backend skills missing
-            - AI/ML tools missing
-
-        5. Do NOT leave missing_skills empty unless resume fully matches JD.
-
-        6. ATS score should realistically reflect:
-            - matching technical skills
-            - project relevance
-            - missing technologies
-            - deployment experience
-            - AI/ML exposure
-
-        7. Roadmap should be strategic and realistic.
-
-        JSON format:
-
         {{
           "ats_score": 0,
-
           "matching_skills": [],
-
-          "missing_skills": [
-            "skill name"
-          ],
-
+          "missing_skills": [],
           "resume_improvements": [],
-
           "important_topics": [],
-
           "projects": [
             {{
               "title": "",
@@ -124,9 +291,7 @@ if st.button("Analyze Resume"):
               "skills_gained": []
             }}
           ],
-
           "interview_questions": [],
-
           "roadmap": {{
               "phase1": {{
                   "title": "",
@@ -160,7 +325,6 @@ if st.button("Analyze Resume"):
 
         try:
 
-            # AI Response
             response = client.chat.completions.create(
                 model="llama-3.1-8b-instant",
                 messages=[
@@ -170,14 +334,10 @@ if st.button("Analyze Resume"):
                     }
                 ]
             )
-
             result = response.choices[0].message.content
-
-            # Clean JSON
             result = re.sub(r"```json", "", result)
             result = re.sub(r"```", "", result)
 
-            # Convert JSON to dictionary
             data = json.loads(result)
 
             # =========================
@@ -190,17 +350,8 @@ if st.button("Analyze Resume"):
 
             st.progress(ats_score / 100)
 
-            if ats_score >= 80:
-                st.success(f"Excellent Match: {ats_score}%")
-
-            elif ats_score >= 60:
-                st.warning(f"Good Match: {ats_score}%")
-
-            else:
-                st.error(f"Low Match: {ats_score}%")
-
             # =========================
-            # SKILLS SECTION
+            # SKILLS
             # =========================
 
             col1, col2 = st.columns(2)
@@ -216,57 +367,11 @@ if st.button("Analyze Resume"):
 
                 st.subheader("Missing Skills")
 
-                if data["missing_skills"]:
-
-                    for skill in data["missing_skills"]:
-                        st.error(skill)
-
-                else:
-                    st.success("No major missing skills detected.")
+                for skill in data["missing_skills"]:
+                    st.error(skill)
 
             # =========================
-            # RESUME IMPROVEMENTS
-            # =========================
-
-            st.subheader("Resume Improvement Suggestions")
-
-            for item in data["resume_improvements"]:
-                st.write(f"• {item}")
-
-            # =========================
-            # IMPORTANT TOPICS
-            # =========================
-
-            st.subheader("Important Topics To Learn")
-
-            for topic in data["important_topics"]:
-                st.write(f"• {topic}")
-
-            # =========================
-            # PROJECTS SECTION
-            # =========================
-
-            st.subheader("Personalized JD-Based Project Suggestions")
-
-            for project in data["projects"]:
-
-                st.markdown(f"### {project['title']}")
-
-                st.write(
-                    f"Difficulty: {project['difficulty']}"
-                )
-
-                st.write(project["description"])
-
-                st.write("Skills Gained:")
-
-                for skill in project["skills_gained"]:
-                    st.write(f"• {skill}")
-
-                st.divider()
-
-            # =========================
-            # ROADMAP SECTION
+            # ROADMAP
             # =========================
 
             st.subheader("Strategic Career Roadmap")
@@ -290,16 +395,37 @@ if st.button("Analyze Resume"):
                         f"### {roadmap[phase]['title']}"
                     )
 
-                    st.write("Focus Areas:")
-
                     for item in roadmap[phase]["focus"]:
                         st.write(f"• {item}")
-
-                    st.write("Recommended Project:")
 
                     st.success(
                         roadmap[phase]["project"]
                     )
+
+            # =========================
+            # PROJECTS
+            # =========================
+
+            st.subheader("Suggested Projects")
+
+            for project in data["projects"]:
+
+                st.markdown(
+                    f"### {project['title']}"
+                )
+
+                st.write(
+                    f"Difficulty: {project['difficulty']}"
+                )
+
+                st.write(project["description"])
+
+                st.write("Skills Gained:")
+
+                for skill in project["skills_gained"]:
+                    st.write(f"• {skill}")
+
+                st.divider()
 
             # =========================
             # INTERVIEW QUESTIONS
@@ -317,6 +443,7 @@ if st.button("Analyze Resume"):
             st.write(str(e))
 
     else:
+
         st.warning(
             "Please upload resume and paste job description."
         )
@@ -327,22 +454,6 @@ if st.button("Analyze Resume"):
 
 st.markdown(
     """
-    <style>
-    .footer {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        width: auto;
-        background-color: #111;
-        color: white;
-        padding: 10px 18px;
-        border-radius: 12px;
-        font-size: 14px;
-        box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
-        z-index: 100;
-    }
-    </style>
-
     <div class="footer">
         🚀 Created by Jaswanth
     </div>
