@@ -320,3 +320,32 @@ if st.button("Analyze Resume"):
         st.warning(
             "Please upload resume and paste job description."
         )
+
+# =========================
+# FLOATING FOOTER
+# =========================
+
+st.markdown(
+    """
+    <style>
+    .footer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: auto;
+        background-color: #111;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
+        z-index: 100;
+    }
+    </style>
+
+    <div class="footer">
+        🚀 Created by Jaswanth
+    </div>
+    """,
+    unsafe_allow_html=True
+)
