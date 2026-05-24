@@ -148,7 +148,7 @@ st.markdown(
         background: rgba(255,255,255,0.05);
         padding: 20px;
         border-radius: 18px;
-        text-align: left;
+        text-align: center;
         box-shadow: 0px 0px 20px rgba(59,130,246,0.25);
         margin-top: 20px;
     }
@@ -163,7 +163,6 @@ st.markdown(
     .feature-text {
         color: #cbd5e1;
         font-size: 15px;
-        line-height: 1.7;
     }
 
     </style>
@@ -204,7 +203,7 @@ with col2:
 
     st.image(
         "ai_banner.png",
-        width=400
+        use_container_width=True
     )
 
 # =========================
@@ -297,36 +296,11 @@ if st.button("Analyze Resume"):
 
         {{
           "ats_score": 0,
-
           "matching_skills": [],
-
           "missing_skills": [],
-
-          "roadmap": [
-            {{
-              "step": "",
-              "description": ""
-            }}
-          ],
-
-          "suggested_projects": [
-            {{
-              "project_name": "",
-              "project_description": "",
-              "skills_gained": []
-            }}
-          ],
-
+          "suggested_projects": [],
           "interview_questions": []
         }}
-
-        Rules:
-        1. Do NOT return markdown
-        2. Do NOT return ```json
-        3. Do NOT return explanations outside JSON
-        4. suggested_projects must NOT contain braces
-        5. roadmap must contain minimum 5 learning steps
-        6. skills_gained should contain technical skills learned from project
 
         Resume:
         {resume_text}
@@ -354,9 +328,7 @@ if st.button("Analyze Resume"):
 
             data = json.loads(result)
 
-            # =========================
             # ATS SCORE
-            # =========================
 
             st.subheader("ATS Match Score")
 
@@ -366,9 +338,7 @@ if st.button("Analyze Resume"):
 
             st.success(f"ATS Score: {ats_score}%")
 
-            # =========================
             # SKILLS
-            # =========================
 
             col1, col2 = st.columns(2)
 
@@ -386,84 +356,24 @@ if st.button("Analyze Resume"):
                 for skill in data["missing_skills"]:
                     st.error(skill)
 
-            # =========================
-            # ROADMAP
-            # =========================
-
-            st.subheader("Learning Roadmap")
-
-            for item in data["roadmap"]:
-
-                st.markdown(
-                    f"""
-                    <div class="feature-card">
-
-                        <div class="feature-title">
-                            {item['step']}
-                        </div>
-
-                        <div class="feature-text">
-                            {item['description']}
-                        </div>
-
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-            # =========================
             # SUGGESTED PROJECTS
-            # =========================
 
             st.subheader("Suggested Projects")
 
             for project in data["suggested_projects"]:
 
-                skills_html = ""
-
-                for skill in project["skills_gained"]:
-
-                    skills_html += f"""
-                    <li>{skill}</li>
-                    """
-
                 st.markdown(
                     f"""
                     <div class="feature-card">
-
                         <div class="feature-title">
-                            {project['project_name']}
+                            {project}
                         </div>
-
-                        <div class="feature-text">
-                            {project['project_description']}
-                        </div>
-
-                        <br>
-
-                        <div style="
-                            color:#38bdf8;
-                            font-weight:bold;
-                            margin-bottom:10px;
-                        ">
-                            Skills Gained
-                        </div>
-
-                        <ul style="
-                            color:white;
-                            text-align:left;
-                        ">
-                            {skills_html}
-                        </ul>
-
                     </div>
                     """,
                     unsafe_allow_html=True
                 )
 
-            # =========================
             # INTERVIEW QUESTIONS
-            # =========================
 
             st.subheader("Interview Questions")
 
